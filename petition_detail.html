@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Petition Details</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+    <style>
+
+        body{
+            background:#f5f7fb;
+        }
+
+        #map{
+            height:350px;
+            border-radius:10px;
+        }
+
+        .card{
+            border:none;
+            border-radius:15px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container mt-4">
+
+    <a href="/admin" class="btn btn-secondary mb-3">
+        ← Back
+    </a>
+
+    <div class="card shadow">
+
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between">
+
+                <div>
+                    <h3>
+                        Petition #{{ petition.id }}
+                    </h3>
+
+                    <h5 class="text-primary">
+                        {{ petition.title }}
+                    </h5>
+                </div>
+
+                <div>
+
+                    {% if petition.urgency == "high" %}
+                        <span class="badge bg-danger fs-6">
+                            HIGH
+                        </span>
+
+                    {% elif petition.urgency == "medium" %}
+
+                        <span class="badge bg-warning text-dark fs-6">
+                            MEDIUM
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge bg-success fs-6">
+                            LOW
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            <hr>
+
+            <div class="row">
+
+                <!-- LEFT -->
+                <div class="col-md-7">
+
+                    <h5>Description</h5>
+
+                    <p>
+                        {{ petition.description }}
+                    </p>
+
+                    <hr>
+
+                    <table class="table">
+
+                        <tr>
+                            <th>Petitioner</th>
+                            <td>{{ petition.petitioner_name }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Department</th>
+                            <td>{{ petition.department }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>District</th>
+                            <td>{{ petition.district }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Taluk</th>
+                            <td>{{ petition.taluk }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Status</th>
+                            <td>
+                                <span class="badge bg-info">
+                                    {{ petition.status }}
+                                </span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Date</th>
+                            <td>{{ petition.created_at }}</td>
+                        </tr>
+
+                    </table>
+
+                    <hr>
+
+                    <h5>Actions</h5>
+
+                    <div class="d-flex gap-2 flex-wrap">
+
+                        <form action="/update-status" method="post">
+
+                            <input type="hidden"
+                                   name="id"
+                                   value="{{ petition.id }}">
+
+                            <input type="hidden"
+                                   name="status"
+                                   value="accepted">
+
+                            <button class="btn btn-primary">
+                                Accept
+                            </button>
+
+                        </form>
+
+                        <form action="/update-status" method="post">
+
+                            <input type="hidden"
+                                   name="id"
+                                   value="{{ petition.id }}">
+
+                            <input type="hidden"
+                                   name="status"
+                                   value="resolved">
+
+                            <button class="btn btn-success">
+                                Resolve
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+                <!-- RIGHT -->
+                <div class="col-md-5">
+
+                    <h5>Issue Location</h5>
+
+                    <div id="map"></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+
+    var lat = Number("{{ petition.latitude if petition.latitude else 11.1271 }}");
+    var lng = Number("{{ petition.longitude if petition.longitude else 78.6569 }}");
+    var map = L.map('map').setView([lat, lng], 13);
+
+    L.tileLayer(
+        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        {
+            attribution: '© OpenStreetMap contributors'
+        }
+    ).addTo(map);
+
+    L.marker([lat, lng]).addTo(map)
+        .bindPopup("{{ petition.title }}")
+        .openPopup();
+
+</script>
+
+</body>
+</html>

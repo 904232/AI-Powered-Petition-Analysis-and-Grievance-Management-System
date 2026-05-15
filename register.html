@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register | Smart Petition System</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+body{
+background: linear-gradient(135deg,#1e3c72,#2a5298);
+font-family: Arial, sans-serif;
+margin:0;
+}
+
+/* NAVBAR */
+.navbar{
+background:#0d6efd;
+}
+.navbar a{
+color:white !important;
+font-weight:500;
+}
+
+/* CARD */
+.register-container{
+max-width:950px;
+margin:40px auto;
+background:white;
+border-radius:15px;
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
+display:flex;
+flex-wrap:wrap;
+overflow:hidden;
+}
+
+.left-side{
+flex:1;
+min-width:300px;
+background:linear-gradient(135deg,#0d6efd,#17a2b8);
+color:white;
+padding:40px;
+}
+
+.right-side{
+flex:1;
+min-width:320px;
+padding:40px;
+}
+
+.form-control,.form-select{
+border-radius:8px;
+}
+
+.btn-register{
+background:#0d6efd;
+color:white;
+border:none;
+padding:12px;
+width:100%;
+border-radius:8px;
+}
+
+.btn-register:hover{
+background:#0b5ed7;
+}
+
+.department-block{
+display:none;
+}
+
+.otp-section{
+display:none;
+}
+
+.password-strength{
+font-size:13px;
+margin-top:5px;
+}
+
+.otp-input{
+width:45px;
+text-align:center;
+font-size:18px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVIGATION -->
+<nav class="navbar navbar-expand-lg">
+<div class="container">
+<a class="navbar-brand" href="#" id="brand-title">Smart Petition</a>
+<div>
+<a href="/register" class="me-3" id="nav-register">Register</a>
+<a href="/login" class="me-3" id="nav-login">Login</a>
+<button class="btn btn-light btn-sm" onclick="toggleLanguage()" id="langBtn">தமிழ்</button>
+</div>
+</div>
+</nav>
+
+<div class="register-container">
+
+<div class="left-side">
+<h4 id="left-title"><i class="fas fa-clipboard-check me-2"></i>Smart Petition System</h4>
+<p id="left-desc">Register to file and track your grievances securely.</p>
+</div>
+
+<div class="right-side">
+
+<h3 class="mb-4" id="page-title">Create Account</h3>
+
+<form id="registerForm">
+
+<!-- USER TYPE -->
+<div class="mb-3">
+<label class="form-label" id="label-user-type">User Type</label>
+<select class="form-select" id="user_type" name="role" onchange="toggleDepartment()" required>
+<option value="" id="option-type-default">Select Type</option>
+<option value="petitioner" id="option-petitioner">Petitioner</option>
+<option value="dept_officer" id="option-dept-officer">Department Officer</option>
+<option value="admin" id="option-admin">Admin</option>
+</select>
+</div>
+
+<!-- DISTRICT FOR ALL USERS -->
+<div class="mb-3">
+<label class="form-label" id="label-district">District</label>
+<select name="district" class="form-select" required>
+<option value="" id="option-district-default">Select District</option>
+
+<option id="district-ariyalur">Ariyalur</option>
+<option id="district-chengalpattu">Chengalpattu</option>
+<option id="district-chennai">Chennai</option>
+<option id="district-coimbatore">Coimbatore</option>
+<option id="district-cuddalore">Cuddalore</option>
+<option id="district-dharmapuri">Dharmapuri</option>
+<option id="district-dindigul">Dindigul</option>
+<option id="district-erode">Erode</option>
+<option id="district-kallakurichi">Kallakurichi</option>
+<option id="district-kancheepuram">Kancheepuram</option>
+<option id="district-kanniyakumari">Kanniyakumari</option>
+<option id="district-karur">Karur</option>
+<option id="district-krishnagiri">Krishnagiri</option>
+<option id="district-madurai">Madurai</option>
+<option id="district-mayiladuthurai">Mayiladuthurai</option>
+<option id="district-nagapattinam">Nagapattinam</option>
+<option id="district-namakkal">Namakkal</option>
+<option id="district-nilgiris">Nilgiris</option>
+<option id="district-perambalur">Perambalur</option>
+<option id="district-pudukkottai">Pudukkottai</option>
+<option id="district-ramanathapuram">Ramanathapuram</option>
+<option id="district-ranipet">Ranipet</option>
+<option id="district-salem">Salem</option>
+<option id="district-sivagangai">Sivagangai</option>
+<option id="district-tenkasi">Tenkasi</option>
+<option id="district-thanjavur">Thanjavur</option>
+<option id="district-theni">Theni</option>
+<option id="district-thoothukudi">Thoothukudi</option>
+<option id="district-tiruchirappalli">Tiruchirappalli</option>
+<option id="district-tirunelveli">Tirunelveli</option>
+<option id="district-tirupathur">Tirupathur</option>
+<option id="district-tiruppur">Tiruppur</option>
+<option id="district-tiruvallur">Tiruvallur</option>
+<option id="district-tiruvannamalai">Tiruvannamalai</option>
+<option id="district-tiruvarur">Tiruvarur</option>
+<option id="district-vellore">Vellore</option>
+<option id="district-viluppuram">Viluppuram</option>
+<option id="district-virudhunagar">Virudhunagar</option>
+</select>
+</div>
+
+<!-- DEPARTMENT -->
+<div class="mb-3 department-block" id="departmentBlock">
+<label class="form-label" id="label-department">Department</label>
+<select class="form-select" name="department">
+<option value="" id="option-department-default">Select Department</option>
+
+<option id="dept-agriculture">Agriculture and Farmers Welfare</option>
+<option id="dept-animal">Animal Husbandry</option>
+<option id="dept-backward">Backward Classes Welfare</option>
+<option id="dept-commercial">Commercial Taxes</option>
+<option id="dept-cooperation">Co-operation</option>
+<option id="dept-energy">Energy</option>
+<option id="dept-environment">Environment and Forest</option>
+<option id="dept-finance">Finance</option>
+<option id="dept-fisheries">Fisheries</option>
+<option id="dept-food">Food and Civil Supplies</option>
+<option id="dept-handlooms">Handlooms and Textiles</option>
+<option id="dept-health">Health and Family Welfare</option>
+<option id="dept-higheredu">Higher Education</option>
+<option id="dept-highways">Highways and Minor Ports</option>
+<option id="dept-hrce">Hindu Religious and Charitable Endowments</option>
+<option id="dept-homepolice">Home (Police)</option>
+<option id="dept-housing">Housing and Urban Development</option>
+<option id="dept-industries">Industries</option>
+<option id="dept-it">Information Technology</option>
+<option id="dept-labour">Labour Welfare and Skill Development</option>
+<option id="dept-law">Law</option>
+<option id="dept-municipal">Municipal Administration</option>
+<option id="dept-pwd">Public Works Department (PWD)</option>
+<option id="dept-rural">Rural Development and Panchayat Raj</option>
+<option id="dept-revenue">Revenue and Disaster Management</option>
+<option id="dept-school">School Education</option>
+<option id="dept-social">Social Welfare</option>
+<option id="dept-tourism">Tourism</option>
+<option id="dept-transport">Transport</option>
+<option id="dept-water">Water</option>
+<option id="dept-youth">Youth Welfare and Sports</option>
+
+</select>
+</div>
+
+<!-- NAME -->
+<div class="mb-3">
+<label class="form-label" id="label-name">Full Name</label>
+<input type="text" name="name" class="form-control" required>
+</div>
+
+<!-- EMAIL -->
+<div class="mb-3">
+<label class="form-label" id="label-email">Email</label>
+<div class="input-group">
+<input type="email" name="email" class="form-control" id="email" required>
+<button type="button" class="btn btn-success" onclick="sendOtp()" id="btn-send-otp">Send OTP</button>
+</div>
+</div>
+
+<!-- OTP SECTION -->
+<div class="otp-section" id="otpSection">
+<label class="form-label" id="label-otp">Enter OTP</label>
+<input type="hidden" name="otp">
+<div class="d-flex gap-2">
+<input type="text" maxlength="1" class="form-control otp-input">
+<input type="text" maxlength="1" class="form-control otp-input">
+<input type="text" maxlength="1" class="form-control otp-input">
+<input type="text" maxlength="1" class="form-control otp-input">
+<input type="text" maxlength="1" class="form-control otp-input">
+<input type="text" maxlength="1" class="form-control otp-input">
+</div>
+<button type="button" class="btn btn-primary mt-3" onclick="verifyOtp()" id="btn-verify-otp">Verify OTP</button>
+</div>
+
+<!-- PASSWORD -->
+<div class="mb-3">
+<label class="form-label" id="label-password">Password</label>
+<div class="input-group">
+<input type="password" name="password" class="form-control" id="password" required onkeyup="checkStrength()">
+<button type="button" class="btn btn-outline-secondary" onclick="togglePassword()">
+<i class="fa fa-eye"></i>
+</button>
+</div>
+<div id="strengthText" class="password-strength"></div>
+</div>
+
+<!-- TERMS -->
+<div class="form-check mb-3">
+<input class="form-check-input" type="checkbox" required>
+<label class="form-check-label" id="terms-label">
+I agree to the 
+<a href="terms.html" id="terms-link">Terms</a> and 
+<a href="privacy.html" id="privacy-link">Privacy Policy</a>
+</label>
+</div>
+
+<button type="submit" class="btn-register" id="btn-register-submit">Register</button>
+
+</form>
+
+</div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+
+    let isOtpVerified = false;
+    let currentLanguage = "en";
+
+    window.toggleDepartment = function(){
+        let type = document.getElementById("user_type").value;
+        let dept = document.getElementById("departmentBlock");
+
+        if(type === "dept_officer"){
+            dept.style.display = "block";
+        } else {
+            dept.style.display = "none";
+            document.querySelector("select[name='department']").value = "";
+        }
+    }
+
+    toggleDepartment();
+
+    window.sendOtp = async function() {
+        let email = document.getElementById("email").value;
+
+        if(!email){
+            alert(currentLanguage === "ta" ? "முதலில் மின்னஞ்சலை உள்ளிடவும்" : "Enter email first");
+            return;
+        }
+
+        try{
+            let formData = new FormData();
+            formData.append("email", email);
+
+            await fetch("http://127.0.0.1:8000/send-otp",{
+                method:"POST",
+                body: formData
+            });
+
+            alert(currentLanguage === "ta" ? "OTP அனுப்பப்பட்டது" : "OTP Sent");
+            document.getElementById("otpSection").style.display="block";
+        } catch(error){
+            alert(currentLanguage === "ta" ? "சர்வர் இயங்கவில்லை" : "Server not running");
+        }
+    }
+
+    window.verifyOtp = async function(){
+        let email = document.getElementById("email").value;
+        let inputs = document.querySelectorAll(".otp-input");
+        let otp="";
+
+        inputs.forEach(input=> otp += input.value);
+
+        document.querySelector("input[name='otp']").value = otp;
+
+        try{
+            let formData = new FormData();
+            formData.append("email", email);
+            formData.append("otp", otp);
+
+            let res = await fetch("http://127.0.0.1:8000/verify-otp",{
+                method:"POST",
+                body: formData
+            });
+
+            let data = await res.json();
+
+            if(data.success){
+                alert(currentLanguage === "ta" ? "OTP சரிபார்க்கப்பட்டது ✅" : "OTP Verified ✅");
+                isOtpVerified = true;
+            }else{
+                alert(currentLanguage === "ta" ? "தவறான OTP ❌" : "Invalid OTP ❌");
+                isOtpVerified = false;
+            }
+        } catch(error){
+            alert(currentLanguage === "ta" ? "OTP சரிபார்ப்பு தோல்வி" : "Verification failed");
+        }
+    }
+
+    document.getElementById("registerForm").addEventListener("submit", async function(e){
+        e.preventDefault();
+
+        if(!isOtpVerified){
+            alert(currentLanguage === "ta" ? "முதலில் OTP சரிபார்க்கவும் ❌" : "Verify OTP first ❌");
+            return;
+        }
+
+        let role = document.getElementById("user_type").value;
+        let dept = document.querySelector("select[name='department']").value;
+
+        if(role === "dept_officer" && !dept){
+            alert(currentLanguage === "ta" ? "துறையை தேர்வு செய்யவும் ❌" : "Select department ❌");
+            return;
+        }
+
+        let formData = new FormData(this);
+
+        try{
+            let res = await fetch("http://127.0.0.1:8000/register",{
+                method:"POST",
+                body: formData
+            });
+
+            let data = await res.json();
+
+            if(data.success){
+                alert(currentLanguage === "ta" ? "வெற்றிகரமாக பதிவு செய்யப்பட்டது ✅" : "Registered ✅");
+                window.location.href="/login";
+            }else{
+                alert(data.message || (currentLanguage === "ta" ? "பதிவு தோல்வி" : "Registration failed"));
+            }
+        } catch(error){
+            alert(currentLanguage === "ta" ? "சர்வர் பிழை" : "Server error");
+        }
+    });
+
+    window.togglePassword = function(){
+        let pwd=document.getElementById("password");
+        pwd.type=(pwd.type==="password")?"text":"password";
+    }
+
+    window.checkStrength = function(){
+        let pwd=document.getElementById("password").value;
+        let text=document.getElementById("strengthText");
+
+        if(pwd.length<6){
+            text.innerHTML = currentLanguage === "ta"
+                ? "<span style='color:red'>பலவீனமான கடவுச்சொல்</span>"
+                : "<span style='color:red'>Weak Password</span>";
+        }
+        else if(pwd.match(/[A-Z]/)&&pwd.match(/[0-9]/)&&pwd.match(/[@$!%*?&]/)){
+            text.innerHTML = currentLanguage === "ta"
+                ? "<span style='color:green'>வலுவான கடவுச்சொல்</span>"
+                : "<span style='color:green'>Strong Password</span>";
+        }
+        else{
+            text.innerHTML = currentLanguage === "ta"
+                ? "<span style='color:orange'>நடுத்தர வலிமை</span>"
+                : "<span style='color:orange'>Medium Strength</span>";
+        }
+    }
+
+    window.toggleLanguage = function() {
+        if (currentLanguage === "en") {
+            document.getElementById("brand-title").innerText = "ஸ்மார்ட் மனு";
+            document.getElementById("nav-register").innerText = "பதிவு செய்";
+            document.getElementById("nav-login").innerText = "உள்நுழை";
+            document.getElementById("langBtn").innerText = "English";
+
+            document.getElementById("left-title").innerHTML = '<i class="fas fa-clipboard-check me-2"></i>ஸ்மார்ட் மனு அமைப்பு';
+            document.getElementById("left-desc").innerText = "உங்கள் குறைகளை பாதுகாப்பாக பதிவு செய்து கண்காணிக்க பதிவு செய்யுங்கள்.";
+
+            document.getElementById("page-title").innerText = "கணக்கு உருவாக்கு";
+            document.getElementById("label-user-type").innerText = "பயனர் வகை";
+            document.getElementById("label-district").innerText = "மாவட்டம்";
+            document.getElementById("label-department").innerText = "துறை";
+            document.getElementById("label-name").innerText = "முழு பெயர்";
+            document.getElementById("label-email").innerText = "மின்னஞ்சல்";
+            document.getElementById("label-otp").innerText = "OTP உள்ளிடவும்";
+            document.getElementById("label-password").innerText = "கடவுச்சொல்";
+
+            document.getElementById("option-type-default").innerText = "வகையை தேர்வு செய்க";
+            document.getElementById("option-petitioner").innerText = "மனுதாரர்";
+            document.getElementById("option-dept-officer").innerText = "துறை அதிகாரி";
+            document.getElementById("option-admin").innerText = "நிர்வாகி";
+
+            document.getElementById("option-district-default").innerText = "மாவட்டத்தை தேர்வு செய்க";
+            document.getElementById("district-ariyalur").innerText = "அரியலூர்";
+            document.getElementById("district-chengalpattu").innerText = "செங்கல்பட்டு";
+            document.getElementById("district-chennai").innerText = "சென்னை";
+            document.getElementById("district-coimbatore").innerText = "கோயம்புத்தூர்";
+            document.getElementById("district-cuddalore").innerText = "கடலூர்";
+            document.getElementById("district-dharmapuri").innerText = "தர்மபுரி";
+            document.getElementById("district-dindigul").innerText = "திண்டுக்கல்";
+            document.getElementById("district-erode").innerText = "ஈரோடு";
+            document.getElementById("district-kallakurichi").innerText = "கள்ளக்குறிச்சி";
+            document.getElementById("district-kancheepuram").innerText = "காஞ்சிபுரம்";
+            document.getElementById("district-kanniyakumari").innerText = "கன்னியாகுமரி";
+            document.getElementById("district-karur").innerText = "கரூர்";
+            document.getElementById("district-krishnagiri").innerText = "கிருஷ்ணகிரி";
+            document.getElementById("district-madurai").innerText = "மதுரை";
+            document.getElementById("district-mayiladuthurai").innerText = "மயிலாடுதுறை";
+            document.getElementById("district-nagapattinam").innerText = "நாகப்பட்டினம்";
+            document.getElementById("district-namakkal").innerText = "நாமக்கல்";
+            document.getElementById("district-nilgiris").innerText = "நீலகிரி";
+            document.getElementById("district-perambalur").innerText = "பெரம்பலூர்";
+            document.getElementById("district-pudukkottai").innerText = "புதுக்கோட்டை";
+            document.getElementById("district-ramanathapuram").innerText = "ராமநாதபுரம்";
+            document.getElementById("district-ranipet").innerText = "ராணிப்பேட்டை";
+            document.getElementById("district-salem").innerText = "சேலம்";
+            document.getElementById("district-sivagangai").innerText = "சிவகங்கை";
+            document.getElementById("district-tenkasi").innerText = "தென்காசி";
+            document.getElementById("district-thanjavur").innerText = "தஞ்சாவூர்";
+            document.getElementById("district-theni").innerText = "தேனி";
+            document.getElementById("district-thoothukudi").innerText = "தூத்துக்குடி";
+            document.getElementById("district-tiruchirappalli").innerText = "திருச்சிராப்பள்ளி";
+            document.getElementById("district-tirunelveli").innerText = "திருநெல்வேலி";
+            document.getElementById("district-tirupathur").innerText = "திருப்பத்தூர்";
+            document.getElementById("district-tiruppur").innerText = "திருப்பூர்";
+            document.getElementById("district-tiruvallur").innerText = "திருவள்ளூர்";
+            document.getElementById("district-tiruvannamalai").innerText = "திருவண்ணாமலை";
+            document.getElementById("district-tiruvarur").innerText = "திருவாரூர்";
+            document.getElementById("district-vellore").innerText = "வேலூர்";
+            document.getElementById("district-viluppuram").innerText = "விழுப்புரம்";
+            document.getElementById("district-virudhunagar").innerText = "விருதுநகர்";
+
+            document.getElementById("option-department-default").innerText = "துறையை தேர்வு செய்க";
+            document.getElementById("dept-agriculture").innerText = "வேளாண்மை மற்றும் விவசாயிகள் நலன்";
+            document.getElementById("dept-animal").innerText = "கால்நடை பராமரிப்பு";
+            document.getElementById("dept-backward").innerText = "பின்னடைந்தோர் நலன்";
+            document.getElementById("dept-commercial").innerText = "வர்த்தக வரிகள்";
+            document.getElementById("dept-cooperation").innerText = "கூட்டுறவு";
+            document.getElementById("dept-energy").innerText = "ஆற்றல்";
+            document.getElementById("dept-environment").innerText = "சுற்றுச்சூழல் மற்றும் காடு";
+            document.getElementById("dept-finance").innerText = "நிதி";
+            document.getElementById("dept-fisheries").innerText = "மீன்வளம்";
+            document.getElementById("dept-food").innerText = "உணவு மற்றும் சிவில் சப்ளைஸ்";
+            document.getElementById("dept-handlooms").innerText = "கைத்தறி மற்றும் நெசவு";
+            document.getElementById("dept-health").innerText = "சுகாதாரம் மற்றும் குடும்ப நலன்";
+            document.getElementById("dept-higheredu").innerText = "உயர் கல்வி";
+            document.getElementById("dept-highways").innerText = "நெடுஞ்சாலைகள் மற்றும் சிறு துறைமுகங்கள்";
+            document.getElementById("dept-hrce").innerText = "இந்துமத அறநிலையத் துறை";
+            document.getElementById("dept-homepolice").innerText = "உள்துறை (காவல்)";
+            document.getElementById("dept-housing").innerText = "வீடமைப்பு மற்றும் நகர்ப்புற வளர்ச்சி";
+            document.getElementById("dept-industries").innerText = "தொழில்துறை";
+            document.getElementById("dept-it").innerText = "தகவல் தொழில்நுட்பம்";
+            document.getElementById("dept-labour").innerText = "தொழிலாளர் நலன் மற்றும் திறன் மேம்பாடு";
+            document.getElementById("dept-law").innerText = "சட்டம்";
+            document.getElementById("dept-municipal").innerText = "நகராட்சி நிர்வாகம்";
+            document.getElementById("dept-pwd").innerText = "பொதுப்பணித்துறை (PWD)";
+            document.getElementById("dept-rural").innerText = "ஊரக வளர்ச்சி மற்றும் ஊராட்சித் துறை";
+            document.getElementById("dept-revenue").innerText = "வருவாய் மற்றும் பேரிடர் மேலாண்மை";
+            document.getElementById("dept-school").innerText = "பள்ளிக் கல்வி";
+            document.getElementById("dept-social").innerText = "சமூக நலன்";
+            document.getElementById("dept-tourism").innerText = "சுற்றுலா";
+            document.getElementById("dept-transport").innerText = "போக்குவரத்து";
+            document.getElementById("dept-water").innerText = "நீர்";
+            document.getElementById("dept-youth").innerText = "இளைஞர் நலன் மற்றும் விளையாட்டு";
+
+            document.getElementById("btn-send-otp").innerText = "OTP அனுப்பு";
+            document.getElementById("btn-verify-otp").innerText = "OTP சரிபார்";
+            document.getElementById("btn-register-submit").innerText = "பதிவு செய்";
+            document.getElementById("terms-label").innerHTML = 'நான் <a href="terms.html" id="terms-link">விதிமுறைகள்</a> மற்றும் <a href="privacy.html" id="privacy-link">தனியுரிமைக் கொள்கை</a>க்கு ஒப்புக்கொள்கிறேன்';
+
+            currentLanguage = "ta";
+            checkStrength();
+
+        } else {
+            document.getElementById("brand-title").innerText = "Smart Petition";
+            document.getElementById("nav-register").innerText = "Register";
+            document.getElementById("nav-login").innerText = "Login";
+            document.getElementById("langBtn").innerText = "தமிழ்";
+
+            document.getElementById("left-title").innerHTML = '<i class="fas fa-clipboard-check me-2"></i>Smart Petition System';
+            document.getElementById("left-desc").innerText = "Register to file and track your grievances securely.";
+
+            document.getElementById("page-title").innerText = "Create Account";
+            document.getElementById("label-user-type").innerText = "User Type";
+            document.getElementById("label-district").innerText = "District";
+            document.getElementById("label-department").innerText = "Department";
+            document.getElementById("label-name").innerText = "Full Name";
+            document.getElementById("label-email").innerText = "Email";
+            document.getElementById("label-otp").innerText = "Enter OTP";
+            document.getElementById("label-password").innerText = "Password";
+
+            document.getElementById("option-type-default").innerText = "Select Type";
+            document.getElementById("option-petitioner").innerText = "Petitioner";
+            document.getElementById("option-dept-officer").innerText = "Department Officer";
+            document.getElementById("option-admin").innerText = "Admin";
+
+            document.getElementById("option-district-default").innerText = "Select District";
+            document.getElementById("district-ariyalur").innerText = "Ariyalur";
+            document.getElementById("district-chengalpattu").innerText = "Chengalpattu";
+            document.getElementById("district-chennai").innerText = "Chennai";
+            document.getElementById("district-coimbatore").innerText = "Coimbatore";
+            document.getElementById("district-cuddalore").innerText = "Cuddalore";
+            document.getElementById("district-dharmapuri").innerText = "Dharmapuri";
+            document.getElementById("district-dindigul").innerText = "Dindigul";
+            document.getElementById("district-erode").innerText = "Erode";
+            document.getElementById("district-kallakurichi").innerText = "Kallakurichi";
+            document.getElementById("district-kancheepuram").innerText = "Kancheepuram";
+            document.getElementById("district-kanniyakumari").innerText = "Kanniyakumari";
+            document.getElementById("district-karur").innerText = "Karur";
+            document.getElementById("district-krishnagiri").innerText = "Krishnagiri";
+            document.getElementById("district-madurai").innerText = "Madurai";
+            document.getElementById("district-mayiladuthurai").innerText = "Mayiladuthurai";
+            document.getElementById("district-nagapattinam").innerText = "Nagapattinam";
+            document.getElementById("district-namakkal").innerText = "Namakkal";
+            document.getElementById("district-nilgiris").innerText = "Nilgiris";
+            document.getElementById("district-perambalur").innerText = "Perambalur";
+            document.getElementById("district-pudukkottai").innerText = "Pudukkottai";
+            document.getElementById("district-ramanathapuram").innerText = "Ramanathapuram";
+            document.getElementById("district-ranipet").innerText = "Ranipet";
+            document.getElementById("district-salem").innerText = "Salem";
+            document.getElementById("district-sivagangai").innerText = "Sivagangai";
+            document.getElementById("district-tenkasi").innerText = "Tenkasi";
+            document.getElementById("district-thanjavur").innerText = "Thanjavur";
+            document.getElementById("district-theni").innerText = "Theni";
+            document.getElementById("district-thoothukudi").innerText = "Thoothukudi";
+            document.getElementById("district-tiruchirappalli").innerText = "Tiruchirappalli";
+            document.getElementById("district-tirunelveli").innerText = "Tirunelveli";
+            document.getElementById("district-tirupathur").innerText = "Tirupathur";
+            document.getElementById("district-tiruppur").innerText = "Tiruppur";
+            document.getElementById("district-tiruvallur").innerText = "Tiruvallur";
+            document.getElementById("district-tiruvannamalai").innerText = "Tiruvannamalai";
+            document.getElementById("district-tiruvarur").innerText = "Tiruvarur";
+            document.getElementById("district-vellore").innerText = "Vellore";
+            document.getElementById("district-viluppuram").innerText = "Viluppuram";
+            document.getElementById("district-virudhunagar").innerText = "Virudhunagar";
+
+            document.getElementById("option-department-default").innerText = "Select Department";
+            document.getElementById("dept-agriculture").innerText = "Agriculture and Farmers Welfare";
+            document.getElementById("dept-animal").innerText = "Animal Husbandry";
+            document.getElementById("dept-backward").innerText = "Backward Classes Welfare";
+            document.getElementById("dept-commercial").innerText = "Commercial Taxes";
+            document.getElementById("dept-cooperation").innerText = "Co-operation";
+            document.getElementById("dept-energy").innerText = "Energy";
+            document.getElementById("dept-environment").innerText = "Environment and Forest";
+            document.getElementById("dept-finance").innerText = "Finance";
+            document.getElementById("dept-fisheries").innerText = "Fisheries";
+            document.getElementById("dept-food").innerText = "Food and Civil Supplies";
+            document.getElementById("dept-handlooms").innerText = "Handlooms and Textiles";
+            document.getElementById("dept-health").innerText = "Health and Family Welfare";
+            document.getElementById("dept-higheredu").innerText = "Higher Education";
+            document.getElementById("dept-highways").innerText = "Highways and Minor Ports";
+            document.getElementById("dept-hrce").innerText = "Hindu Religious and Charitable Endowments";
+            document.getElementById("dept-homepolice").innerText = "Home (Police)";
+            document.getElementById("dept-housing").innerText = "Housing and Urban Development";
+            document.getElementById("dept-industries").innerText = "Industries";
+            document.getElementById("dept-it").innerText = "Information Technology";
+            document.getElementById("dept-labour").innerText = "Labour Welfare and Skill Development";
+            document.getElementById("dept-law").innerText = "Law";
+            document.getElementById("dept-municipal").innerText = "Municipal Administration";
+            document.getElementById("dept-pwd").innerText = "Public Works Department (PWD)";
+            document.getElementById("dept-rural").innerText = "Rural Development and Panchayat Raj";
+            document.getElementById("dept-revenue").innerText = "Revenue and Disaster Management";
+            document.getElementById("dept-school").innerText = "School Education";
+            document.getElementById("dept-social").innerText = "Social Welfare";
+            document.getElementById("dept-tourism").innerText = "Tourism";
+            document.getElementById("dept-transport").innerText = "Transport";
+            document.getElementById("dept-water").innerText = "Water";
+            document.getElementById("dept-youth").innerText = "Youth Welfare and Sports";
+
+            document.getElementById("btn-send-otp").innerText = "Send OTP";
+            document.getElementById("btn-verify-otp").innerText = "Verify OTP";
+            document.getElementById("btn-register-submit").innerText = "Register";
+            document.getElementById("terms-label").innerHTML = 'I agree to the <a href="terms.html" id="terms-link">Terms</a> and <a href="privacy.html" id="privacy-link">Privacy Policy</a>';
+
+            currentLanguage = "en";
+            checkStrength();
+        }
+    }
+});
+const inputs = document.querySelectorAll(".otp-input");
+
+inputs.forEach((input, index) => {
+    input.addEventListener("input", (e) => {
+        if (e.target.value.length === 1) {
+            if (index < inputs.length - 1) {
+                inputs[index + 1].focus();
+            }
+        }
+    });
+
+    input.addEventListener("keydown", (e) => {
+        if (e.key === "Backspace" && input.value === "") {
+            if (index > 0) {
+                inputs[index - 1].focus();
+            }
+        }
+    });
+});
+</script>
+
+</body>
+</html>

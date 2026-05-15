@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Petition System | Tamil Nadu</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+body{
+font-family: 'Roboto', sans-serif;
+margin:0;
+background:#f5f7fa;
+}
+
+/* Navbar */
+.navbar{
+background:#0a58ca;
+}
+.nav-link{
+color:white !important;
+font-weight:500;
+}
+.nav-link:hover{
+text-decoration:underline;
+}
+
+/* Hero */
+.hero{
+background:linear-gradient(135deg,#1e3c72,#2a5298);
+color:white;
+padding:100px 20px;
+text-align:center;
+}
+.hero h1{
+font-weight:700;
+}
+.btn-custom{
+background:white;
+color:#0a58ca;
+border:none;
+padding:12px 28px;
+border-radius:8px;
+font-weight:600;
+}
+.btn-custom:hover{
+background:#f1f1f1;
+}
+
+/* Section */
+.section{
+padding:60px 20px;
+}
+.section-title{
+text-align:center;
+font-weight:700;
+margin-bottom:40px;
+}
+
+/* Feature Card */
+.card-feature{
+background:white;
+padding:40px;
+border-radius:15px;
+box-shadow:0 4px 15px rgba(0,0,0,0.1);
+text-align:center;
+}
+
+/* HOW IT WORKS */
+.how-section{
+padding:80px 20px;
+background:linear-gradient(to right,#eef2f3,#dfe9f3);
+}
+
+.how-wrapper{
+display:flex;
+gap:30px;
+flex-wrap:wrap;
+justify-content:center;
+}
+
+.how-card{
+background:white;
+padding:40px;
+width:300px;
+border-radius:20px;
+text-align:center;
+box-shadow:0 10px 25px rgba(0,0,0,0.1);
+transition:all 0.4s ease;
+cursor:pointer;
+}
+
+.how-card:hover{
+transform:translateY(-15px) scale(1.07);
+background:linear-gradient(135deg,#0d6efd,#1e3c72);
+color:white;
+box-shadow:0 20px 40px rgba(13,110,253,0.4);
+}
+
+.step-circle{
+width:70px;
+height:70px;
+background:#0d6efd;
+color:white;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+margin:0 auto 20px auto;
+font-size:28px;
+transition:0.4s;
+}
+
+.how-card:hover .step-circle{
+background:white;
+color:#0d6efd;
+}
+
+/* Footer */
+footer{
+background:#0a58ca;
+color:white;
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVIGATION -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+<div class="container">
+<a class="navbar-brand text-white fw-bold" href="#">
+<i class="fas fa-clipboard-check me-2"></i>
+Smart Petition System
+</a>
+
+<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+<span class="navbar-toggler-icon"></span>
+</button>
+
+<div class="collapse navbar-collapse" id="navMenu">
+<ul class="navbar-nav ms-auto align-items-center">
+<li class="nav-item">
+<a class="nav-link active" href="#" id="nav-home">Home</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="/login" id="nav-login">Login</a>
+</li>
+<li class="nav-item">
+<a class="nav-link" href="/register" id="nav-register">Register</a>
+</li>
+<li class="nav-item ms-3">
+<button class="btn btn-light btn-sm" onclick="toggleLanguage()" id="langBtn">தமிழ்</button>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+<h1 id="hero-title">Submit & Track Petitions Digitally</h1>
+<p class="mt-3" id="hero-subtitle">Secure Tamil Nadu Government-Linked Grievance Portal</p>
+<div class="mt-4">
+<a href="/login" class="btn btn-custom me-2" id="btn-signin">Sign In</a>
+<a href="/register" class="btn btn-custom" id="btn-register">Create Account</a>
+</div>
+</section>
+
+<!-- KEY FEATURES -->
+<section class="section bg-light">
+<div class="container">
+<h2 class="section-title" id="features-title">Key Features</h2>
+
+<div id="featuresCarousel" class="carousel slide" data-bs-ride="carousel">
+
+<div class="carousel-inner">
+
+<div class="carousel-item active">
+<div class="card-feature text-center">
+<i class="fas fa-file-import fa-3x text-primary mb-3"></i>
+<h5 id="feature1-title">Easy Online Submission</h5>
+<p id="feature1-desc">Submit petitions anytime from mobile or desktop.</p>
+</div>
+</div>
+
+<div class="carousel-item">
+<div class="card-feature text-center">
+<i class="fas fa-tasks fa-3x text-primary mb-3"></i>
+<h5 id="feature2-title">Real-Time Tracking</h5>
+<p id="feature2-desc">Track petition status from submitted to resolved.</p>
+</div>
+</div>
+
+<div class="carousel-item">
+<div class="card-feature text-center">
+<i class="fas fa-bell fa-3x text-primary mb-3"></i>
+<h5 id="feature3-title">Email Notifications</h5>
+<p id="feature3-desc">Get email updates at every important stage.</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section">
+<div class="container">
+<h2 class="text-center fw-bold mb-5" id="how-title">How It Works</h2>
+
+<div class="how-wrapper">
+
+<div class="how-card">
+<div class="step-circle">1</div>
+<h4 id="how1-title">Register Account</h4>
+<p id="how1-desc">Create your account and verify with OTP for secure access.</p>
+</div>
+
+<div class="how-card">
+<div class="step-circle">2</div>
+<h4 id="how2-title">Submit Petition</h4>
+<p id="how2-desc">Select department & district and describe your issue clearly.</p>
+</div>
+
+<div class="how-card">
+<div class="step-circle">3</div>
+<h4 id="how3-title">Track Status</h4>
+<p id="how3-desc">Monitor progress and receive instant email notifications.</p>
+</div>
+
+</div>
+</div>
+</section>
+
+<!-- FOOTER -->
+<footer class="text-center p-3">
+© 2026 Smart Petition System | Tamil Nadu
+</footer>
+<script>
+let currentLanguage = "en";
+
+function toggleLanguage() {
+    if (currentLanguage === "en") {
+        // Navbar
+        document.getElementById("nav-home").innerText = "முகப்பு";
+        document.getElementById("nav-login").innerText = "உள்நுழை";
+        document.getElementById("nav-register").innerText = "பதிவு செய்";
+        document.getElementById("langBtn").innerText = "English";
+
+        // Hero
+        document.getElementById("hero-title").innerText = "மனுக்களை ஆன்லைனில் சமர்ப்பித்து கண்காணிக்கவும்";
+        document.getElementById("hero-subtitle").innerText = "தமிழ்நாடு அரசு இணைந்த பாதுகாப்பான குறைதீர் தளம்";
+        document.getElementById("btn-signin").innerText = "உள்நுழை";
+        document.getElementById("btn-register").innerText = "கணக்கு உருவாக்கு";
+
+        // Section Titles
+        document.getElementById("features-title").innerText = "முக்கிய அம்சங்கள்";
+        document.getElementById("how-title").innerText = "இது எப்படி செயல்படுகிறது";
+        document.getElementById("feature1-title").innerText = "எளிய ஆன்லைன் சமர்ப்பிப்பு";
+        document.getElementById("feature1-desc").innerText = "மொபைல் அல்லது டெஸ்க்டாப் மூலம் எப்போது வேண்டுமானாலும் மனுக்களை சமர்ப்பிக்கலாம்.";
+
+        document.getElementById("feature2-title").innerText = "நேரடி நிலை கண்காணிப்பு";
+        document.getElementById("feature2-desc").innerText = "சமர்ப்பித்தது முதல் தீர்வு வரை மனுவின் நிலையை கண்காணிக்கலாம்.";
+
+        document.getElementById("feature3-title").innerText = "மின்னஞ்சல் அறிவிப்புகள்";
+        document.getElementById("feature3-desc").innerText = "ஒவ்வொரு முக்கிய கட்டத்திலும் மின்னஞ்சல் மூலம் தகவல் பெறலாம்.";
+        document.getElementById("how1-title").innerText = "கணக்கு பதிவு"; 
+        document.getElementById("how1-desc").innerText = "பாதுகாப்பான அணுகலுக்காக OTP மூலம் உங்கள் கணக்கை உருவாக்கி சரிபார்க்கவும்.";
+
+        document.getElementById("how2-title").innerText = "மனு சமர்ப்பி";
+        document.getElementById("how2-desc").innerText = "துறை மற்றும் மாவட்டத்தை தேர்ந்தெடுத்து உங்கள் பிரச்சினையை தெளிவாக எழுதவும்.";
+
+        document.getElementById("how3-title").innerText = "நிலையை கண்காணி";
+        document.getElementById("how3-desc").innerText = "முன்னேற்றத்தை கண்காணித்து உடனடி மின்னஞ்சல் அறிவிப்புகளை பெறுங்கள்.";
+
+        currentLanguage = "ta";
+    } else {
+        // Navbar
+        document.getElementById("nav-home").innerText = "Home";
+        document.getElementById("nav-login").innerText = "Login";
+        document.getElementById("nav-register").innerText = "Register";
+        document.getElementById("langBtn").innerText = "தமிழ்";
+
+        // Hero
+        document.getElementById("hero-title").innerText = "Submit & Track Petitions Digitally";
+        document.getElementById("hero-subtitle").innerText = "Secure Tamil Nadu Government-Linked Grievance Portal";
+        document.getElementById("btn-signin").innerText = "Sign In";
+        document.getElementById("btn-register").innerText = "Create Account";
+
+        // Section Titles
+        document.getElementById("features-title").innerText = "Key Features";
+        document.getElementById("how-title").innerText = "How It Works";
+        document.getElementById("feature1-title").innerText = "Easy Online Submission";
+        document.getElementById("feature1-desc").innerText = "Submit petitions anytime from mobile or desktop.";
+        document.getElementById("feature2-title").innerText = "Real-Time Tracking";
+        document.getElementById("feature2-desc").innerText = "Track petition status from submitted to resolved.";
+        document.getElementById("feature3-title").innerText = "Email Notifications";
+        document.getElementById("feature3-desc").innerText = "Get email updates at every important stage.";
+        document.getElementById("how1-title").innerText = "Register Account";
+        document.getElementById("how1-desc").innerText = "Create your account and verify with OTP for secure access.";
+
+        document.getElementById("how2-title").innerText = "Submit Petition";
+        document.getElementById("how2-desc").innerText = "Select department & district and describe your issue clearly.";
+
+        document.getElementById("how3-title").innerText = "Track Status";
+        document.getElementById("how3-desc").innerText = "Monitor progress and receive instant email notifications.";
+
+        currentLanguage = "en";
+    }
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

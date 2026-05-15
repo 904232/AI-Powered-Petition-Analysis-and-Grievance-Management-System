@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Verify Email - AI Petition System</title>
+    <style>
+        body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#667eea,#764ba2);min-height:100vh;display:flex;align-items:center;justify-content:center;}
+        .container{background:white;padding:40px;border-radius:25px;box-shadow:0 25px 50px rgba(0,0,0,0.15);max-width:500px;text-align:center;}
+        h1{color:#4CAF50;font-size:2.5em;margin-bottom:20px;}
+        p{font-size:18px;color:#333;line-height:1.6;}
+        .btn{display:inline-block;background:#4CAF50;color:white;padding:15px 40px;text-decoration:none;border-radius:12px;font-size:18px;font-weight:600;margin:20px 0;transition:all 0.3s;}
+        .btn:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(76,175,80,0.4);}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✅ Verified!</h1>
+        <p>Your account has been successfully verified.</p>
+        <p><strong>You can now login to the AI Petition System!</strong></p>
+        <a href="login.html" class="btn">🔐 GO TO LOGIN</a>
+        <p><small>Didn't request this? Ignore this email.</small></p>
+    </div>
+
+    <script>
+        // AUTO-VERIFY FROM URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+        const email = urlParams.get('email');
+        
+        if (token && email) {
+            fetch(`/verify-email/?token=${token}&email=${email}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.success) {
+                        document.querySelector('h1').textContent = '❌ Verification Failed';
+                        document.querySelector('.btn').style.display = 'none';
+                        document.querySelector('p').textContent = data.message;
+                    }
+                });
+        }
+    </script>
+</body>
+</html>

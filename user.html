@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Submit Petition - Smart Petition System</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+
+    <style>
+        body {
+            background-color: #f4f7fa;
+        }
+
+        .card {
+            border-radius: 14px;
+        }
+
+        .form-label {
+            font-weight: 600;
+        }
+
+        .voice-btn {
+            color: #0d6efd;
+            cursor: pointer;
+            min-width: 120px;
+            font-weight: 600;
+        }
+
+        .voice-btn:hover {
+            color: #0b5ed7;
+        }
+
+        #lang-toggle {
+            font-weight: 700;
+            border-radius: 10px;
+            min-width: 110px;
+            background-color: #ffffff !important;
+            color: #0d6efd !important;
+            border: 2px solid #ffffff !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        #lang-toggle:hover {
+            background-color: #eaf2ff !important;
+            color: #0b5ed7 !important;
+        }
+
+        .navbar-user-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .preview-box {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid #dee2e6;
+        }
+
+        .recording {
+            color: red !important;
+            font-weight: bold;
+        }
+
+        .mic-status {
+            font-size: 13px;
+            margin-top: 6px;
+            color: #6c757d;
+        }
+
+        @media (max-width: 768px) {
+            .navbar-user-box {
+                flex-direction: column;
+                align-items: flex-end;
+                gap: 6px;
+            }
+
+            .navbar-brand {
+                font-size: 16px;
+            }
+
+            .voice-btn {
+                min-width: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<nav class="navbar navbar-dark bg-primary navbar-expand">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/index">
+            <i class="fas fa-gavel"></i>
+            <span id="brand-text">Smart Petition System</span>
+        </a>
+
+        <div class="navbar-user-box text-white ms-auto">
+            <div class="me-2">
+                <i class="fas fa-user me-1"></i>
+                {{ user.name }} <span id="role-text">(Petitioner)</span>
+            </div>
+
+            <button type="button" class="btn btn-light btn-sm" id="lang-toggle">தமிழ்</button>
+        </div>
+    </div>
+</nav>
+
+<!-- Main content -->
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-9">
+
+            <div class="card shadow-sm mb-3">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-edit me-2"></i>
+                        <span id="submit-title">Submit New Petition</span>
+                    </h5>
+                </div>
+
+                <div class="card-body">
+                    <form id="petitionForm" action="/petition/submit" method="post" enctype="multipart/form-data">
+                         <!-- ✅ ADD THESE -->
+                        <input type="hidden" name="latitude" id="latitude">
+                        <input type="hidden" name="longitude" id="longitude">
+                        <input type="hidden" name="petitioner" value="{{ user.email }}">
+                        
+
+                        <!-- Title -->
+                        <div class="mb-3">
+                            <label for="title" class="form-label" id="title-label">Petition Title *</label>
+                            <input type="text" class="form-control" id="title" name="title"
+                                   placeholder="Brief title of the issue" required>
+                            <div class="form-text" id="title-example">Example: “Water Supply Issue in My Street”</div>
+                        </div>
+
+                        <!-- District -->
+                        <div class="mb-3">
+                            <label for="district" class="form-label" id="district-label">District *</label>
+                            <select class="form-select" id="district" name="district" required></select>
+                        </div>
+
+                        <!-- Taluk -->
+                        <div class="mb-3">
+                            <label for="taluk" class="form-label" id="taluk-label">Taluk *</label>
+                            <input type="text" class="form-control" id="taluk" name="taluk"
+                                   placeholder="Enter your taluk" required>
+                            <div class="form-text text-muted" id="taluk-help">Type your taluk name manually.</div>
+                        </div>
+
+                        <!-- Department -->
+                        <div class="mb-3">
+                            <label for="department" class="form-label" id="department-label">Department (optional)</label>
+                            <select class="form-select" id="department" name="department"></select>
+                            <div class="form-text text-muted" id="department-help">
+                                This field is optional. Urgency will be detected by AI from your description.
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-3">
+                            <label for="description" class="form-label" id="description-label">Detailed Description *</label>
+
+                            <!-- Voice Language Selection -->
+                            <div class="mb-2">
+                                <label for="voiceLanguage" class="form-label fw-semibold" id="voice-language-label">Voice Input Language(Select before speaking)</label>
+                                <select class="form-select" id="voiceLanguage" style="max-width: 250px;">
+                                    <option value="en-IN">English</option>
+                                    <option value="ta-IN">தமிழ்</option>
+                                </select>
+                                <div class="form-text text-muted" id="voice-language-help">
+                                    Choose the language you will speak. This is separate from page language.
+                                </div>
+                            </div>
+
+                            <div class="input-group">
+                                <textarea class="form-control" id="description" name="description" rows="6"
+                                          placeholder="Describe the issue, location, impact, and any supporting details..." required></textarea>
+                                <button type="button" class="btn btn-outline-secondary voice-btn" id="micButton">
+                                    <i class="fas fa-microphone"></i>
+                                    <span class="ms-1" id="voice-text">Voice</span>
+                                </button>
+                            </div>
+
+                            <div class="mic-status" id="mic-status">Mic is off</div>
+
+                            <div class="form-text text-muted" id="description-help">
+                                Click the mic and speak. It will keep recording until you turn it off manually.
+                            </div>
+                        </div>
+
+                        <!-- Location -->
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="allow_location" name="allow_location">
+                                <label class="form-check-label" for="allow_location" id="location-label">
+                                    <i class="fas fa-map-marker-alt me-1 text-success"></i>
+                                    Allow system to get my current location (for more accurate mapping)
+                                </label>
+                            </div>
+                            <div class="form-text text-muted small" id="location-help">
+                                This helps identify the exact area of the issue on the map.
+                            </div>
+                        </div>
+
+                        <!-- Attachments -->
+                        <div class="mb-3">
+                            <label for="attachments" class="form-label" id="attachments-label">Attachments (optional)</label>
+                            <input type="file" class="form-control" id="attachments" name="attachments" multiple
+                                   accept="image/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+                            <small id="file-name-text" class="text-muted d-block mt-2">No file chosen</small>
+                            <div class="form-text text-muted small" id="attachments-help">
+                                Upload photos, documents, or PDFs that support your petition.
+                            </div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-between mt-4 flex-wrap gap-2">
+                            <a href="/user_dashboard" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i><span id="back-text">Back to Dashboard</span>
+                            </a>
+
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#previewModal">
+                                    <i class="fas fa-eye me-2"></i><span id="preview-btn-text">Preview</span>
+                                </button>
+
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-paper-plane me-2"></i><span id="submit-btn-text">Submit Petition</span>
+                                </button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="text-center py-3 mt-5 bg-light text-muted small">
+    <p id="footer-text">Smart Petition System | Government of Tamil Nadu | 2026</p>
+</footer>
+
+<!-- Preview Modal -->
+<div class="modal fade" id="previewModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="preview-title">Petition Preview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="preview-box">
+                    <p><strong id="pv-title-lbl">Title:</strong> <span id="pv-title"></span></p>
+                    <p><strong id="pv-district-lbl">District:</strong> <span id="pv-district"></span></p>
+                    <p><strong id="pv-taluk-lbl">Taluk:</strong> <span id="pv-taluk"></span></p>
+                    <p><strong id="pv-department-lbl">Department:</strong> <span id="pv-department"></span></p>
+                    <p><strong id="pv-description-lbl">Description:</strong></p>
+                    <p id="pv-description" class="border rounded p-3 bg-light"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+/* =========================
+   LANGUAGE MODE
+========================= */
+let tamilMode = false;
+const langToggle = document.getElementById("lang-toggle");
+
+/* =========================
+   TEXT TRANSLATIONS
+========================= */
+const text = {
+    en: {
+        "brand-text": "Smart Petition System",
+        "role-text": "(Petitioner)",
+        "submit-title": "Submit New Petition",
+        "title-label": "Petition Title *",
+        "title-example": "Example: ‘Water Supply Issue in My Street’",
+        "district-label": "District *",
+        "taluk-label": "Taluk *",
+        "taluk-help": "Type your taluk name manually.",
+        "department-label": "Department (optional)",
+        "department-help": "This field is optional. Urgency will be detected by AI from your description.",
+        "description-label": "Detailed Description *",
+        "voice-text": "Voice",
+        "voice-language-label": "Voice Input Language",
+        "voice-language-help": "Choose the language you will speak. This is separate from page language.",
+        "description-help": "Click the mic and speak. It will keep recording until you turn it off manually.",
+        "location-label": "Allow system to get my current location (for more accurate mapping)",
+        "location-help": "This helps identify the exact area of the issue on the map.",
+        "attachments-label": "Attachments (optional)",
+        "attachments-help": "Upload photos, documents, or PDFs that support your petition.",
+        "back-text": "Back to Dashboard",
+        "submit-btn-text": "Submit Petition",
+        "preview-btn-text": "Preview",
+        "preview-title": "Petition Preview",
+        "pv-title-lbl": "Title:",
+        "pv-district-lbl": "District:",
+        "pv-taluk-lbl": "Taluk:",
+        "pv-department-lbl": "Department:",
+        "pv-description-lbl": "Description:",
+        "footer-text": "Smart Petition System | Government of Tamil Nadu | 2026"
+    },
+    ta: {
+        "brand-text": "ஸ்மார்ட் மனு அமைப்பு",
+        "role-text": "(மனுதாரர்)",
+        "submit-title": "புதிய மனுவை சமர்ப்பிக்கவும்",
+        "title-label": "மனு தலைப்பு *",
+        "title-example": "எடுத்துக்காட்டு: ‘என் தெருவில் நீர் விநியோக பிரச்சனை’",
+        "district-label": "மாவட்டம் *",
+        "taluk-label": "தாலுகா *",
+        "taluk-help": "உங்கள் தாலுகா பெயரை கைமுறையாக உள்ளிடவும்.",
+        "department-label": "துறை (விருப்பம்)",
+        "department-help": "இந்த புலம் விருப்பமானது. உங்கள் விளக்கத்திலிருந்து AI அவசரத்தை கண்டறியும்.",
+        "description-label": "விரிவான விளக்கம் *",
+        "voice-text": "குரல்",
+        "voice-language-label": "குரல் உள்ளீட்டு மொழி",
+        "voice-language-help": "நீங்கள் பேசும் மொழியைத் தேர்ந்தெடுக்கவும். இது பக்க மொழியிலிருந்து தனித்தது.",
+        "description-help": "மைக் அழுத்தி பேசுங்கள். நீங்கள் நிறுத்தும் வரை அது கேட்டு பதிவு செய்யும்.",
+        "location-label": "என் தற்போதைய இருப்பிடத்தை பெற அனுமதிக்கவும் (மேலும் துல்லியமான வரைபடத்திற்காக)",
+        "location-help": "இது சிக்கலின் சரியான இடத்தை கண்டறிய உதவும்.",
+        "attachments-label": "இணைப்புகள் (விருப்பம்)",
+        "attachments-help": "உங்கள் மனுவிற்கு ஆதாரமாக புகைப்படங்கள், ஆவணங்கள் அல்லது PDF-களை பதிவேற்றவும்.",
+        "back-text": "டாஷ்போர்டுக்கு திரும்பு",
+        "submit-btn-text": "மனுவை சமர்ப்பிக்கவும்",
+        "preview-btn-text": "முன்னோட்டம்",
+        "preview-title": "மனு முன்னோட்டம்",
+        "pv-title-lbl": "தலைப்பு:",
+        "pv-district-lbl": "மாவட்டம்:",
+        "pv-taluk-lbl": "தாலுகா:",
+        "pv-department-lbl": "துறை:",
+        "pv-description-lbl": "விளக்கம்:",
+        "footer-text": "ஸ்மார்ட் மனு அமைப்பு | தமிழ்நாடு அரசு | 2026"
+    }
+};
+
+const placeholders = {
+    en: {
+        title: "Brief title of the issue",
+        taluk: "Enter your taluk",
+        description: "Describe the issue, location, impact, and any supporting details..."
+    },
+    ta: {
+        title: "சிக்கலின் சுருக்கமான தலைப்பை இடவும்",
+        taluk: "உங்கள் தாலுகா பெயரை இடவும்",
+        description: "சிக்கல், இடம், தாக்கம் மற்றும் ஆதரவு விவரங்களை விவரிக்கவும்..."
+    }
+};
+
+/* =========================
+   DISTRICTS
+========================= */
+const allDistricts = [
+    ["chennai", "Chennai", "சென்னை"],
+    ["coimbatore", "Coimbatore", "கோயம்புத்தூர்"],
+    ["madurai", "Madurai", "மதுரை"],
+    ["tiruchirappalli", "Tiruchirappalli", "திருச்சிராப்பள்ளி"],
+    ["salem", "Salem", "சேலம்"],
+    ["tirunelveli", "Tirunelveli", "திருநெல்வேலி"],
+    ["tiruppur", "Tiruppur", "திருப்பூர்"],
+    ["erode", "Erode", "ஈரோடு"],
+    ["karur", "Karur", "கரூர்"],
+    ["namakkal", "Namakkal", "நாமக்கல்"],
+    ["dharmapuri", "Dharmapuri", "தர்மபுரி"],
+    ["krishnagiri", "Krishnagiri", "கிருஷ்ணகிரி"],
+    ["villupuram", "Villupuram", "விழுப்புரம்"],
+    ["cuddalore", "Cuddalore", "கடலூர்"],
+    ["kallakurichi", "Kallakurichi", "கள்ளக்குறிச்சி"],
+    ["tiruvannamalai", "Tiruvannamalai", "திருவண்ணாமலை"],
+    ["vellore", "Vellore", "வேலூர்"],
+    ["ranipet", "Ranipet", "ராணிப்பேட்டை"],
+    ["thiruvallur", "Thiruvallur", "திருவள்ளூர்"],
+    ["chengalpattu", "Chengalpattu", "செங்கல்பட்டு"],
+    ["kancheepuram", "Kancheepuram", "காஞ்சிபுரம்"],
+    ["tuticorin", "Tuticorin", "தூத்துக்குடி"],
+    ["tenkasi", "Tenkasi", "தென்காசி"],
+    ["ramanathapuram", "Ramanathapuram", "ராமநாதபுரம்"],
+    ["sivagangai", "Sivagangai", "சிவகங்கை"],
+    ["pudukkottai", "Pudukkottai", "புதுக்கோட்டை"],
+    ["nagapattinam", "Nagapattinam", "நாகப்பட்டினம்"],
+    ["thanjavur", "Thanjavur", "தஞ்சாவூர்"],
+    ["tiruvarur", "Tiruvarur", "திருவாரூர்"],
+    ["perambalur", "Perambalur", "பெரம்பலூர்"],
+    ["kanyakumari", "Kanyakumari", "கன்னியாகுமரி"]
+];
+
+const departments = [
+    ["others", "Select Department (optional)", "துறையைத் தேர்ந்தெடுக்கவும் (விருப்பம்)"],
+    ["Agriculture and Farmers Welfare", "Agriculture and Farmers Welfare", "விவசாயம் மற்றும் விவசாயிகள் நலன்"],
+    ["Animal Husbandry", "Animal Husbandry", "கால்நடை பராமரிப்பு"],
+    ["Backward Classes Welfare", "Backward Classes Welfare", "பின்னடைந்தோர் நலன்"],
+    ["Commercial Taxes", "Commercial Taxes", "வர்த்தக வரிகள்"],
+    ["Co-operation", "Co-operation", "கூட்டுறவு"],
+    ["Energy", "Energy", "ஆற்றல்"],
+    ["Environment and Forest", "Environment and Forest", "சுற்றுச்சூழல் மற்றும் காடு"],
+    ["Finance", "Finance", "நிதி"],
+    ["Fisheries", "Fisheries", "மீன்வளம்"],
+    ["Food and Civil Supplies", "Food and Civil Supplies", "உணவு மற்றும் நுகர்வோர் பாதுகாப்பு"],
+    ["Handlooms and Textiles", "Handlooms and Textiles", "கைத்தறி மற்றும் நெசவு"],
+    ["Health and Family Welfare", "Health and Family Welfare", "சுகாதாரம் மற்றும் குடும்ப நலன்"],
+    ["Higher Education", "Higher Education", "உயர் கல்வி"],
+    ["Highways and Minor Ports", "Highways and Minor Ports", "நெடுஞ்சாலைகள் மற்றும் சிறு துறைமுகங்கள்"],
+    ["Home (Police)", "Home (Police)", "உள்துறை (போலீஸ்)"],
+    ["Housing and Urban Development", "Housing and Urban Development", "வீட்டுவசதி மற்றும் நகர்ப்புற வளர்ச்சி"],
+    ["Industries", "Industries", "தொழில்கள்"],
+    ["Information Technology", "Information Technology", "தகவல் தொழில்நுட்பம்"],
+    ["Labour Welfare and Skill Development", "Labour Welfare and Skill Development", "தொழிலாளர் நலன் மற்றும் திறன் மேம்பாடு"],
+    ["Law", "Law", "சட்டம்"],
+    ["Municipal Administration", "Municipal Administration", "நகராட்சி நிர்வாகம்"],
+    ["Public Works Department (PWD)", "Public Works Department (PWD)", "பொதுப்பணித்துறை"],
+    ["Rural Development and Panchayat Raj", "Rural Development and Panchayat Raj", "கிராம வளர்ச்சி மற்றும் ஊராட்சி"],
+    ["Revenue and Disaster Management", "Revenue and Disaster Management", "வருவாய் மற்றும் பேரிடர் மேலாண்மை"],
+    ["School Education", "School Education", "பள்ளிக் கல்வி"],
+    ["Social Welfare", "Social Welfare", "சமூக நலன்"],
+    ["Tourism", "Tourism", "சுற்றுலா"],
+    ["Transport", "Transport", "போக்குவரத்து"],
+    ["Water", "Water", "நீர் வளம்"],
+    ["Youth Welfare and Sports", "Youth Welfare and Sports", "இளைஞர் நலன் மற்றும் விளையாட்டு"],
+    ["others2", "Other / Unknown", "மற்றவை / தெரியாது"]
+];
+
+/* =========================
+   POPULATE DROPDOWNS
+========================= */
+function populateDistricts() {
+    const district = document.getElementById("district");
+    const current = district.value;
+
+    district.innerHTML = `<option value="">${tamilMode ? "மாவட்டத்தைத் தேர்ந்தெடுக்கவும்" : "Select District"}</option>`;
+
+    allDistricts.forEach(([val, en, ta]) => {
+        district.innerHTML += `<option value="${val}">${tamilMode ? ta : en}</option>`;
+    });
+
+    if (current) district.value = current;
+}
+
+function populateDepartments() {
+    const dept = document.getElementById("department");
+    const current = dept.value;
+    dept.innerHTML = "";
+
+    departments.forEach(([val, en, ta], idx) => {
+        dept.innerHTML += `<option value="${idx === 0 ? "others" : val}">${tamilMode ? ta : en}</option>`;
+    });
+
+    if (current) dept.value = current;
+}
+
+function updateVoiceLanguageOptions() {
+    const voiceLang = document.getElementById("voiceLanguage");
+    const current = voiceLang.value;
+
+    voiceLang.innerHTML = `
+        <option value="en-IN">${tamilMode ? "ஆங்கிலம்" : "English"}</option>
+        <option value="ta-IN">${tamilMode ? "தமிழ்" : "Tamil"}</option>
+    `;
+
+    voiceLang.value = current || "ta-IN";
+}
+
+/* =========================
+   LANGUAGE UPDATE
+========================= */
+function updateLanguage() {
+    const set = tamilMode ? text.ta : text.en;
+
+    for (const id in set) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = set[id];
+    }
+
+    document.getElementById("title").placeholder = tamilMode ? placeholders.ta.title : placeholders.en.title;
+    document.getElementById("taluk").placeholder = tamilMode ? placeholders.ta.taluk : placeholders.en.taluk;
+    document.getElementById("description").placeholder = tamilMode ? placeholders.ta.description : placeholders.en.description;
+
+    langToggle.textContent = tamilMode ? "English" : "தமிழ்";
+
+    populateDistricts();
+    populateDepartments();
+    updateVoiceLanguageOptions();
+    updateFileText();
+}
+
+/* =========================
+   FILE NAME UPDATE
+========================= */
+function updateFileText() {
+    const fileInput = document.getElementById("attachments");
+    const fileText = document.getElementById("file-name-text");
+
+    if (fileInput.files.length === 0) {
+        fileText.textContent = tamilMode ? "எந்த கோப்பும் தேர்வு செய்யப்படவில்லை" : "No file chosen";
+    } else {
+        fileText.textContent = tamilMode
+            ? `${fileInput.files.length} கோப்பு(கள்) தேர்வு செய்யப்பட்டது`
+            : `${fileInput.files.length} file(s) selected`;
+    }
+}
+
+/* =========================
+   LOCATION
+========================= */
+document.getElementById("allow_location").addEventListener("change", function () {
+    if (this.checked) {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    document.getElementById("latitude").value = position.coords.latitude;
+                    document.getElementById("longitude").value = position.coords.longitude;
+                },
+                (error) => {
+                    alert(tamilMode ? "இருப்பிடத்தை பெற முடியவில்லை." : "Unable to fetch location.");
+                    this.checked = false;
+                }
+            );
+        } else {
+            alert(tamilMode ? "உங்கள் உலாவியில் Location support இல்லை." : "Geolocation not supported in this browser.");
+            this.checked = false;
+        }
+    } else {
+        document.getElementById("latitude").value = "";
+        document.getElementById("longitude").value = "";
+    }
+});
+
+/* =========================
+   EVENT LISTENERS
+========================= */
+langToggle.addEventListener("click", () => {
+    tamilMode = !tamilMode;
+    updateLanguage();
+});
+
+document.getElementById("attachments").addEventListener("change", updateFileText);
+
+/* =========================
+   PREVIEW MODAL
+========================= */
+document.querySelector('[data-bs-target="#previewModal"]').addEventListener("click", () => {
+    const districtValue = document.getElementById("district");
+    const deptValue = document.getElementById("department");
+
+    document.getElementById("pv-title").textContent = document.getElementById("title").value || "-";
+    document.getElementById("pv-district").textContent = districtValue.options[districtValue.selectedIndex]?.text || "-";
+    document.getElementById("pv-taluk").textContent = document.getElementById("taluk").value || "-";
+    document.getElementById("pv-department").textContent = deptValue.options[deptValue.selectedIndex]?.text || "-";
+    document.getElementById("pv-description").textContent = document.getElementById("description").value || "-";
+});
+
+/* =========================
+   VOICE INPUT
+========================= */
+if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+
+    const micButton = document.getElementById("micButton");
+    const descriptionTextarea = document.getElementById("description");
+    const micStatus = document.getElementById("mic-status");
+    const voiceLanguage = document.getElementById("voiceLanguage");
+
+    let isListening = false;
+    let finalTranscript = "";
+
+    recognition.continuous = true;
+    recognition.interimResults = true;
+
+    micButton.addEventListener("click", () => {
+        recognition.lang = document.getElementById("voiceLanguage").value;
+        console.log("Selected Language:", recognition.lang);
+
+        if (!isListening) {
+            finalTranscript = descriptionTextarea.value ? descriptionTextarea.value + " " : "";
+            recognition.start();
+            isListening = true;
+
+            micButton.innerHTML = tamilMode
+                ? '<i class="fas fa-microphone-slash"></i> <span class="ms-1">நிறுத்து</span>'
+                : '<i class="fas fa-microphone-slash"></i> <span class="ms-1">Stop</span>';
+
+            micButton.classList.add("recording");
+            micStatus.textContent = tamilMode ? "🎙️ கேட்டு கொண்டிருக்கிறது..." : "🎙️ Listening...";
+        } else {
+            recognition.stop();
+            isListening = false;
+        }
+    });
+
+    recognition.onresult = (event) => {
+        let interimTranscript = "";
+        let newFinalTranscript = finalTranscript;
+
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+            const transcript = event.results[i][0].transcript;
+
+            if (event.results[i].isFinal) {
+                newFinalTranscript += transcript + " ";
+            } else {
+                interimTranscript += transcript;
+            }
+        }
+
+        descriptionTextarea.value = newFinalTranscript + interimTranscript;
+        finalTranscript = newFinalTranscript;
+    };
+
+    recognition.onerror = (event) => {
+        alert((tamilMode ? "குரல் பிழை: " : "Voice error: ") + event.error);
+        isListening = false;
+        micButton.innerHTML = tamilMode
+            ? '<i class="fas fa-microphone"></i> <span class="ms-1">குரல்</span>'
+            : '<i class="fas fa-microphone"></i> <span class="ms-1">Voice</span>';
+        micButton.classList.remove("recording");
+        micStatus.textContent = tamilMode ? "மைக் அணைக்கப்பட்டது" : "Mic is off";
+    };
+
+    recognition.onend = () => {
+        if (isListening) {
+            recognition.lang = voiceLanguage.value;
+            recognition.start();
+        } else {
+            micButton.innerHTML = tamilMode
+                ? '<i class="fas fa-microphone"></i> <span class="ms-1">குரல்</span>'
+                : '<i class="fas fa-microphone"></i> <span class="ms-1">Voice</span>';
+            micButton.classList.remove("recording");
+            micStatus.textContent = tamilMode ? "மைக் அணைக்கப்பட்டது" : "Mic is off";
+        }
+    };
+
+    voiceLanguage.addEventListener("change", () => {
+        if (isListening) {
+            micStatus.textContent = tamilMode
+                ? "⚠️ மொழி மாற்றம் அடுத்த பதிவு தொடங்கும் போது செயல்படும்"
+                : "⚠️ Language change will apply when the next recording starts";
+        }
+    });
+
+} else {
+    document.getElementById("micButton").disabled = true;
+    document.getElementById("micButton").style.opacity = "0.5";
+    document.getElementById("micButton").title = "Speech input not supported in this browser";
+    document.getElementById("mic-status").textContent = "Speech recognition not supported";
+}
+
+/* =========================
+   AJAX FORM SUBMIT
+========================= */
+document.getElementById("petitionForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    let formData = new FormData(this);
+
+    try {
+        let res = await fetch("/petition/submit", {
+            method: "POST",
+            body: formData
+        });
+
+        let data = await res.json();
+
+        if (data.success) {
+            alert("✅ " + data.message);
+            this.reset();
+            document.getElementById("latitude").value = "";
+            document.getElementById("longitude").value = "";
+            updateFileText();
+            updateVoiceLanguageOptions();
+        } else {
+            alert("⚠️ " + data.message);
+        }
+    } catch (error) {
+        alert(tamilMode ? "⚠️ சமர்ப்பிப்பில் பிழை ஏற்பட்டது." : "⚠️ Error submitting petition.");
+    }
+});
+
+/* =========================
+   INITIAL LOAD
+========================= */
+populateDistricts();
+populateDepartments();
+updateLanguage();
+</script>
+<script>
+
+document.getElementById("allow_location").addEventListener("change", function() {
+
+    if (this.checked) {
+
+        navigator.geolocation.getCurrentPosition(function(position){
+
+            document.getElementById("latitude").value =
+                position.coords.latitude;
+
+            document.getElementById("longitude").value =
+                position.coords.longitude;
+
+            console.log("LOCATION CAPTURED");
+
+        });
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>
